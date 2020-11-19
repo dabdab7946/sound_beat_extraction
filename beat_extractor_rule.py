@@ -19,11 +19,20 @@ import utils
 # =======================================================================================
 # 파일 및 기타정보 설정
 
-AUDIO_PATH = 'dataset/samples/'
-audio_file = 'edm_02.wav'
-SAVE_PATH = AUDIO_PATH + 'beats_{}/'.format(audio_file.split('.')[0])
+
+with open('./config.json', 'rb') as f:
+    config = json.loads(f.read().decode())
+
+
+audio_path = config.get('audio_path')
+audio_file = config.get('audio_file')
+
+
+
+SAVE_PATH = audio_path + 'beats_{}/'.format(audio_file.split('.')[0])
 if not os.path.exists(SAVE_PATH):
     os.makedirs(SAVE_PATH)
+
 
 
 UNIT_TIME = 10   #
@@ -153,8 +162,8 @@ def find_beats(unit_sound, sr=44100, margin=1, THRESH=0.02, UNIT_START_TIME=0,
 # ===========================================================================================
 # Load Music
 start = time.time()
-sr = librosa.get_samplerate(AUDIO_PATH + audio_file)
-sound, sr = librosa.load(AUDIO_PATH + audio_file, sr=sr)
+sr = librosa.get_samplerate(audio_path + audio_file)
+sound, sr = librosa.load(audio_path + audio_file, sr=sr)
 duration = int(librosa.get_duration(sound, sr))
 
 
@@ -174,7 +183,7 @@ for i in range(0, N_UNITS):     # 첫번째 UnitTime(10초) ~ END
     #
     unit_beat_list = find_beats(
         unit_sound, sr, margin=1, THRESH=THRESH, UNIT_START_TIME=UNIT_START_TIME,
-        show_chart=True, savefile=SAVE_PATH + 'unit_sound_{}.png', audiopath=AUDIO_PATH, audiofile=audio_file)
+        show_chart=True, savefile=SAVE_PATH + 'unit_sound_{}.png', audiopath=audio_path, audiofile=audio_file)
     #
     beat_info_list += unit_beat_list
 

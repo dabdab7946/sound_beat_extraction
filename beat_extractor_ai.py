@@ -67,8 +67,12 @@ with g.as_default():
 # ==================================================================================
 # TEST
 
-audio_path = 'dataset/samples/'
-audio_file = 'clouds-forest.wav'
+with open('./config.json', 'rb') as f:
+    config = json.loads(f.read().decode())
+
+
+audio_path = config.get('audio_path')
+audio_file = config.get('audio_file')
 
 
 
